@@ -145,16 +145,41 @@ Lets take another look at our snippet for handling a request.
 
             // Find user permissions by user id
             findUserPermissions(user.id, function (err, permissions) {
+
+                // Check for error
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+
                 if (permission.contains('admin')) {
                     
                     // Insert data into database
                     sql.query('INSERT INTO ....', function (err, result) {
+
+                        // Check for error
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
                         
                         // Update data in database
                         sql.query('UPDATE ....', function (err, result) {
 
+                            // Check for error
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
+
                             // Call third party api
                             http.get(url, function (err, response) {
+
+                                // Check for error
+                                if (err) {
+                                    console.error(err);
+                                    return;
+                                }
                                 
                                 // Send JSON object to client
                                 sendJSONToClient();
@@ -166,6 +191,12 @@ Lets take another look at our snippet for handling a request.
                     // Insert data into database
                     sql.query('INSERT INTO ....', function (err, result) {
 
+                        // Check for error
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+
                          // Send JSON object to client
                          sendJSONToClient();
                     });
@@ -175,6 +206,10 @@ Lets take another look at our snippet for handling a request.
     });
 
 ```
+
+#### Why is this bad?
+
+
 
 
     
