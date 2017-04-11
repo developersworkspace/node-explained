@@ -19,8 +19,11 @@ A single threaded application can be thought of as a long line at a cash registe
 
 ```javascript
     console.log('Reading file...');
+
     var fileBytes = fs.readFileSync(filename, "utf8");
+
     console.log('The file contains ' + fileBytes.length + ' bytes.');
+
     console.log('Done.');
 ```
 
@@ -31,6 +34,8 @@ A single threaded application can be thought of as a long line at a cash registe
     The file contains 142 bytes.
     Done.
 ```
+
+Handling a web request
 
 ```javascript
     function handleRequest() {
@@ -55,7 +60,11 @@ Apart from your application, Node runs an IO and Network thread pool which consi
 
 These threads can be used to offload IO and Network tasks.
 
+Example of a non-blocking task.
+
 ```javascript
+    console.log('Reading file...');
+
     fs.readFile('/etc/hosts', 'utf8', function (err,fileBytes) {
         console.log('The file contains ' + fileBytes.length + ' bytes');
     });
@@ -69,8 +78,34 @@ These threads can be used to offload IO and Network tasks.
     Reading file...
     Done.
     The file contains 142 bytes.
-    
 ```
+
+Example of a blocking task.
+
+```javascript
+    console.log('Reading file...');
+
+    fs.readFile('/etc/hosts', 'utf8', function (err,fileBytes) {
+        console.log('The file contains ' + fileBytes.length + ' bytes');
+    });
+
+    doSomeStuffThatTakesVeryLong();
+
+    console.log('Done.');
+```
+
+What do you think the output will be?
+
+
+```
+    OUTPUT:
+    
+    Reading file...
+    Done.
+    The file contains 142 bytes.
+```
+
+
 
 
 
