@@ -5,7 +5,7 @@ In this document we'll cover:
     1. The Event Loop
       a. What is single threaded?
       b. Thread Pool
-      c. Example and FAQ
+      c. FAQ
     2. Callback Hell
       a. The Problem
       b. The Solution
@@ -105,9 +105,76 @@ What do you think the output will be?
     The file contains 142 bytes.
 ```
 
+Lets take another look at our snippet for handling a request.
+
+```javascript
+
+    function handleRequest() {
+        // Retrieve data from database
+        sql.query('SELECT * FROM ....', function (err1, result1) {
+
+            // Calculate averages
+            calculateAverages();
+
+            // Write data to database
+            sql.query('INSERT INTO ....', function (err2, result2) {
+                // Send JSON object to client
+                sendJSONToClient();
+            }
+        }
+    }
+```
+
+### FAQ
+
+*
+*
+*
 
 
+## Callback Hell
 
+### The Problem
+
+```javascript
+    // Find user by username
+    findUserByUsername(username, function (err, user) {
+        
+        // Check if user is active
+        if (user.isActive) {
+
+            // Find user permissions by user id
+            findUserPermissions(user.id, function (err, permissions) {
+                if (permission.contains('admin')) {
+                    
+                    // Insert data into database
+                    sql.query('INSERT INTO ....', function (err, result) {
+                        
+                        // Update data in database
+                        sql.query('UPDATE ....', function (err, result) {
+
+                            // Call third party api
+                            http.get(url, function (err, response) {
+                                
+                                // Send JSON object to client
+                                sendJSONToClient();
+                            });
+                        });
+                    });
+                }else {
+
+                    // Insert data into database
+                    sql.query('INSERT INTO ....', function (err, result) {
+
+                         // Send JSON object to client
+                         sendJSONToClient();
+                    });
+                }
+            });
+        }
+    });
+
+```
 
 
     
