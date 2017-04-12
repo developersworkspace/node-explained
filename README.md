@@ -204,13 +204,50 @@ Lets take another look at our snippet for handling a request.
             });
         }
     });
-
 ```
 
-#### Why is this bad?
 
-* Code should be shallow.
-* 
+### The Solution
+
+```javascript
+    // Find user by username
+    findUserByUsername(username).then(function(result) {
+
+        // Check if user is active
+        if (user.isActive) {
+
+            // Find user permissions by user id
+            return findUserPermissions(user.id);
+        }
+        
+    }).then(function (result) {
+         if (permission.contains('admin')) {
+
+             // Insert data into database
+             return sql.query('INSERT INTO ....');
+
+         } else {
+
+             // Insert data into database
+             return sql.query('INSERT INTO ....');
+        
+         }
+    }).then(function (result) {
+
+        // Call third party api
+        return http.get(url);
+
+    }).then(function (result) {
+
+        // Send JSON object to client
+        sendJSONToClient();
+
+    }).catch(function (err) {
+        console.error(err);
+    });
+```
+
+
 
 
 The MIT License (MIT)
