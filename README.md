@@ -10,6 +10,7 @@ In this document we'll cover:
     1. The Problem
     2. The Solution
     3. Frameworks
+    4. CO Example
 
 ## The Event Loop
 
@@ -211,7 +212,7 @@ Lets take another look at our snippet for handling a request.
 
 ```javascript
     // Find user by username
-    findUserByUsername(username).then(function(result) {
+    findUserByUsername(username).then(function(user) {
 
         // Check if user is active
         if (user.isActive) {
@@ -219,8 +220,8 @@ Lets take another look at our snippet for handling a request.
             // Find user permissions by user id
             return findUserPermissions(user.id);
         }
-        
-    }).then(function (result) {
+
+    }).then(function (permission) {
          if (permission.contains('admin')) {
 
              // Insert data into database
@@ -237,7 +238,7 @@ Lets take another look at our snippet for handling a request.
         // Call third party api
         return http.get(url);
 
-    }).then(function (result) {
+    }).then(function (response) {
 
         // Send JSON object to client
         sendJSONToClient();
@@ -247,7 +248,47 @@ Lets take another look at our snippet for handling a request.
     });
 ```
 
+### Frameworks
 
+Frameworks to make async calls read better:
+
+* CO
+* BlueBird
+* Async.js
+
+
+### CO Example
+
+```javascript
+co(function* () {
+    // Find user by username
+    var user = yield findUserByUsername(username);
+
+    // Check if user is active
+    if (user.isActive) {
+
+        // Find user permissions by user id
+        var permissions = yield findUserPermissions(user.id);
+
+        if (permission.contains('admin')) {
+
+            // Insert data into database
+            var result = yield sql.query('INSERT INTO ....');
+
+            var response = yield http.get(url);
+
+            // Send JSON object to client
+            sendJSONToClient();
+
+         } else {
+
+            // Insert data into database
+            var result = yield sql.query('INSERT INTO ....');
+        
+         }
+    }
+});
+```
 
 
 The MIT License (MIT)
